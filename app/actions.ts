@@ -1,11 +1,19 @@
 "use server";
 
+import { z } from "zod";
+import {
+  USERNAME_MIN_LENGTH,
+  PASSWORD_MIN_LENGTH,
+  PASSWORD_REGEX,
+  PASSWORD_REGEX_ERROR,
+} from "@/lib/constants";
+
 interface LoginResponse {
   email: FormDataEntryValue | null;
   username: FormDataEntryValue | null;
   password: FormDataEntryValue | null;
   message?: string;
-  errors?: string[];
+  errors?: Record<string, string[]>;
   loggedIn?: boolean;
 }
 
@@ -21,15 +29,29 @@ export async function logIn(
     password: formData.get("password"),
   };
 
-  if (data.password != "12345") {
+  const result = formSchema.safeParse(data);
+
+  if (!result.success) {
     return {
       ...data,
       loggedIn: false,
-      errors: ["Wrong password"],
+      errors: result.error.flatten().fieldErrors,
+    };
+  } else {
+    return {
+      ...data,
+      loggedIn: true,
     };
   }
-  return {
-    ...data,
-    loggedIn: true,
-  };
 }
+
+const formSchema = z.object({
+  email: z.string().email().endsWith("@zod.com").toLowerCase(),
+  username: z.string().min(USERNAME_MIN_LENGTH),
+  password: z
+    .string({
+      required_error: "Password is required",
+    })
+    .min(PASSWORD_MIN_LENGTH)
+    .regex(PASSWORD_REGEX, PASSWORD_REGEX_ERROR),
+});

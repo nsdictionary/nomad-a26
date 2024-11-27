@@ -4,7 +4,7 @@ import Button from "@/components/button";
 import Input from "@/components/input";
 import { useActionState } from "react";
 import { logIn } from "./actions";
-
+import { PASSWORD_MIN_LENGTH, USERNAME_MIN_LENGTH } from "@/lib/constants";
 export default function Home() {
   const [state, dispatch] = useActionState(logIn, null);
   return (
@@ -17,6 +17,7 @@ export default function Home() {
             type="email"
             placeholder="✉️Email"
             required
+            errors={state?.errors?.email}
             defaultValue={state?.email?.toString() || ""}
           />
           <Input
@@ -24,15 +25,18 @@ export default function Home() {
             type="text"
             placeholder="👤Username"
             required
+            errors={state?.errors?.username}
             defaultValue={state?.username?.toString() || ""}
+            // minLength={USERNAME_MIN_LENGTH}
           />
           <Input
             name="password"
             type="password"
             placeholder="🔑Password"
             required
-            errors={state?.errors}
+            errors={state?.errors?.password}
             defaultValue={state?.password?.toString() || ""}
+            // minLength={PASSWORD_MIN_LENGTH}
           />
           <Button text="Log in" />
         </form>
