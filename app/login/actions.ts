@@ -84,7 +84,6 @@ export async function logIn(
         password: true,
       },
     });
-    console.log(user);
     const ok = await bcrypt.compare(
       result.data.password,
       user!.password ?? "xxxx"
@@ -93,7 +92,7 @@ export async function logIn(
       const session = await getSession();
       session.id = user!.id;
       await session.save();
-      redirect("/profile");
+      redirect("/");
     } else {
       return {
         ...data,
