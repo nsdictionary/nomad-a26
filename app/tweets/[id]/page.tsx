@@ -1,4 +1,5 @@
 import { getTweetDetail } from "./actions";
+import Link from "next/link";
 
 export default async function TweetDetail({
   params,
@@ -9,6 +10,9 @@ export default async function TweetDetail({
   const tweetDetail = await getTweetDetail(id);
   return (
     <div className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-xl shadow-md">
+      <Link href="/?page=1" className="text-blue-500 mb-4 block">
+        ← 목록으로 돌아가기
+      </Link>
       <h1 className="text-2xl font-bold mb-4 break-words">
         {tweetDetail.tweet}
       </h1>
