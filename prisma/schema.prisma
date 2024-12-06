@@ -17,6 +17,7 @@ model User {
   updatedAt DateTime @updatedAt @map("updated_at")
   tweets    Tweet[]
   likes     Like[]
+  responses Response[]
 }
 
 model Tweet {
@@ -27,6 +28,18 @@ model Tweet {
   user      User     @relation(fields: [userId], references: [id])
   userId    Int      @map("user_id")
   likes     Like[]
+  responses Response[]
+}
+
+model Response {
+  id        Int      @id @default(autoincrement())
+  response  String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  tweet     Tweet    @relation(fields: [tweetId], references: [id])
+  tweetId   Int      @map("tweet_id")
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int      @map("user_id")
 }
 
 model Like {
