@@ -67,13 +67,18 @@ export default async function TweetDetail({
             <button type="submit">새로고침</button>
           </form>
         </div>
-        <h1 className="text-2xl font-bold mb-4 break-words">
+        <h1 className="text-lg font-bold mb-4 break-words">
           {tweetDetail.tweet}
         </h1>
         <div className="border-t pt-4 mt-4 text-gray-600">
           <p className="mb-2">
             <span className="font-semibold">작성자:</span>{" "}
-            {tweetDetail.user.username}
+            <Link
+              className="text-blue-500 font-semibold"
+              href={`/users/${tweetDetail.user.username}`}
+            >
+              {tweetDetail.user.username}
+            </Link>
           </p>
           <p>
             <span className="font-semibold">작성일:</span>{" "}

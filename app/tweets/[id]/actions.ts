@@ -46,6 +46,11 @@ export async function createResponse(tweetId: string, content: string) {
   }
 
   const session = await getSession();
+  if (!session.id) {
+    return {
+      error: "로그인이 필요합니다",
+    };
+  }
 
   return db.response.create({
     data: {
