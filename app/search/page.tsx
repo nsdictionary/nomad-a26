@@ -35,7 +35,7 @@ export default function SearchPage() {
           />
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-300 rounded-3xl text-white"
+            className="px-4 py-2 bg-blue-500 rounded-3xl text-white"
           >
             검색
           </button>

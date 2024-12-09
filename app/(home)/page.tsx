@@ -50,7 +50,7 @@ export default function TweetList() {
         <div className="text-lg font-bold">트윗 목록</div>
         <Link
           href="/profile"
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+          className="px-4 py-2 bg-blue-500 text-white rounded-3xl hover:bg-blue-600 transition-colors"
         >
           프로필
         </Link>
@@ -60,25 +60,35 @@ export default function TweetList() {
           <TweetCard key={tweet.id} tweet={tweet} />
         ))}
       </div>
-      <div className="flex justify-center gap-4">
+      <div className="flex justify-between items-center">
+        <div />
+        <div className="flex justify-center gap-4">
+          <Link
+            href={`/?page=${currentPage - 1}`}
+            className={`px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors ${
+              currentPage <= 1 ? "invisible" : ""
+            }`}
+          >
+            ← 이전
+          </Link>
+          <span className="flex items-center font-medium">
+            {currentPage} / {totalPages}
+          </span>
+          <Link
+            href={`/?page=${currentPage + 1}`}
+            className={`px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors ${
+              currentPage >= totalPages ? "invisible" : ""
+            }`}
+          >
+            다음 →
+          </Link>
+        </div>
+
         <Link
-          href={`/?page=${currentPage - 1}`}
-          className={`px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors ${
-            currentPage <= 1 ? "invisible" : ""
-          }`}
+          href="/search"
+          className="px-4 py-2 bg-blue-500 text-white rounded-3xl hover:bg-blue-600 transition-colors"
         >
-          ← 이전
-        </Link>
-        <span className="flex items-center font-medium">
-          {currentPage} / {totalPages}
-        </span>
-        <Link
-          href={`/?page=${currentPage + 1}`}
-          className={`px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors ${
-            currentPage >= totalPages ? "invisible" : ""
-          }`}
-        >
-          다음 →
+          검색
         </Link>
       </div>
     </div>
