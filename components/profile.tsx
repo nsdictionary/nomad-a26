@@ -22,7 +22,7 @@ export type ProfileState = {
   email: FormDataEntryValue | null;
   bio: FormDataEntryValue | null;
   password: FormDataEntryValue | null;
-  confirm_password: FormDataEntryValue | null;
+  confirm_password?: FormDataEntryValue | null;
   id: FormDataEntryValue | null;
 } | null;
 
@@ -40,13 +40,28 @@ export default function Profile({
     null
   ) as [ProfileState, (formData: FormData) => void, boolean];
   const [optimisticUser, setOptimisticUser] = useOptimistic(
-    user,
-    (state, formData: FormData) => ({
-      ...state,
-      username: formData.get("username")?.toString() || state.username,
-      email: formData.get("email")?.toString() || state.email,
-      bio: formData.get("bio")?.toString() || state.bio,
-    })
+    {
+      id: user.id.toString() as FormDataEntryValue,
+      username: user.username,
+      email: user.email,
+      bio: user.bio,
+      password: null,
+      confirm_password: null,
+    } as ProfileState,
+    (state: ProfileState) => {
+      const formData = new FormData();
+      return {
+        id: user.id.toString() as FormDataEntryValue,
+        username:
+          formData.get("username")?.toString() ||
+          state?.username ||
+          user.username,
+        email: formData.get("email")?.toString() || state?.email || user.email,
+        bio: formData.get("bio")?.toString() || state?.bio || user.bio,
+        password: null,
+        confirm_password: null,
+      };
+    }
   );
 
   return (
@@ -122,7 +137,7 @@ export default function Profile({
               <span className="font-medium">이메일:</span> {user.email}
             </p>
             <p>
-              <span className="font-medium">가입일:</span>{" "}
+              <span className="font-medium">���입일:</span>{" "}
               {user.createdAt.toLocaleDateString()}
             </p>
             <p>
