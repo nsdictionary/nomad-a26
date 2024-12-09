@@ -3,6 +3,8 @@ import { notFound, redirect } from "next/navigation";
 import TweetCard from "@/components/tweet-card";
 import BackButton from "@/app/components/back-button";
 import { revalidatePath } from "next/cache";
+import getSession from "@/lib/session";
+import Link from "next/link";
 
 export default async function UserProfilePage({
   params,
@@ -10,6 +12,8 @@ export default async function UserProfilePage({
   params: { username: string };
 }) {
   const { username } = await params;
+
+  const session = await getSession();
 
   const revalidate = async () => {
     "use server";
@@ -25,6 +29,7 @@ export default async function UserProfilePage({
   if (!profile) {
     notFound();
   }
+  const isOwner = session?.id === profile?.id;
 
   return (
     <div className="p-6">
@@ -44,6 +49,14 @@ export default async function UserProfilePage({
           <p className="text-gray-600 text-sm mt-2">
             가입일: {new Date(profile.createdAt).toLocaleDateString()}
           </p>
+          {isOwner && (
+            <Link
+              href={`/users/${username}/edit`}
+              className="text-blue-500 hover:underline"
+            >
+              프로필 수정
+            </Link>
+          )}
         </div>
       </div>
       <div className="border-b border-gray-300 mb-4" />
