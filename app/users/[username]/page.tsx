@@ -1,7 +1,8 @@
 import { getUserProfile, getUserTweets } from "./actions";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import TweetCard from "@/components/tweet-card";
 import BackButton from "@/app/components/back-button";
+import { revalidatePath } from "next/cache";
 
 export default async function UserProfilePage({
   params,
@@ -9,6 +10,12 @@ export default async function UserProfilePage({
   params: { username: string };
 }) {
   const { username } = await params;
+
+  const revalidate = async () => {
+    "use server";
+    revalidatePath(`/users/${username}`);
+    redirect(`/users/${username}`);
+  };
 
   const [profile, tweets] = await Promise.all([
     getUserProfile(username),
@@ -21,8 +28,13 @@ export default async function UserProfilePage({
 
   return (
     <div className="p-6">
-      <div className="mb-4">
+      <div className="mb-4 flex justify-between items-center">
         <BackButton />
+        <form action={revalidate}>
+          <button className="text-blue-500" type="submit">
+            새로고침
+          </button>
+        </form>
       </div>
       <div className="flex items-center gap-4 mb-8">
         <div>

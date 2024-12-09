@@ -3,7 +3,7 @@
 import { ITweet } from "@/app/(home)/actions";
 import db from "@/lib/db";
 import getSession from "@/lib/session";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { z } from "zod";
 
 export async function getTweetDetail(id: string): Promise<ITweet> {

@@ -2,10 +2,10 @@ import { getTweetDetail, getUserName } from "./actions";
 import Link from "next/link";
 import ResponseList from "@/components/response-list";
 import getSession from "@/lib/session";
-import LikeButton from "@/components/like-buttion";
 import { unstable_cache as nextCache, revalidatePath } from "next/cache";
 import db from "@/lib/db";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import LikeButton from "@/components/like-button";
 
 async function getLikeStatus(tweetId: number, userId: number) {
   const isLiked = await db.like.findUnique({
@@ -40,10 +40,11 @@ export default async function TweetDetail({
 }: {
   params: { id: string };
 }) {
-  const { id } = await Promise.resolve(params);
+  const { id } = await params;
   const revalidate = async () => {
     "use server";
     revalidatePath(`/tweets/${id}`);
+    redirect(`/tweets/${id}`);
   };
   const session = await getSession();
   if (!session || typeof session.id === "undefined") {
