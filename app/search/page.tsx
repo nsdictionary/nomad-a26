@@ -10,9 +10,11 @@ export default function SearchPage() {
   const [query, setQuery] = useState("");
   const [tweets, setTweets] = useState<ITweet[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [isSearched, setIsSearched] = useState(false);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSearched(true);
     const results = await searchTweets(query);
     if (results.error) {
       setError(results.error);
@@ -47,7 +49,7 @@ export default function SearchPage() {
       )}
 
       <div className="space-y-4">
-        {error == null && tweets.length === 0 ? (
+        {error == null && isSearched && tweets.length === 0 ? (
           <div className="text-center text-gray-500 py-8">
             검색 결과가 없습니다.
           </div>
