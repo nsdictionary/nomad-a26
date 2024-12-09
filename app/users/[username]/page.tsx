@@ -9,7 +9,7 @@ import Link from "next/link";
 export default async function UserProfilePage({
   params,
 }: {
-  params: { username: string };
+  params: Promise<{ username: string }>;
 }) {
   const { username } = await params;
 
@@ -54,7 +54,7 @@ export default async function UserProfilePage({
               href={`/users/${username}/edit`}
               className="text-blue-500 hover:underline"
             >
-              프로필 수정
+              프로�� 수정
             </Link>
           )}
         </div>
