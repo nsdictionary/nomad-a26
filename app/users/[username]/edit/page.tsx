@@ -21,7 +21,7 @@ async function getUser() {
 export default async function UserEditPage({
   params,
 }: {
-  params: { username: string };
+  params: Promise<{ username: string }>;
 }) {
   const { username } = await params;
 
