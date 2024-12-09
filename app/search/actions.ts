@@ -2,6 +2,7 @@
 
 import db from "@/lib/db";
 import { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 const SearchSchema = z.object({
   query: z.string().min(1).max(20),
@@ -29,6 +30,7 @@ export async function searchTweets(query: string) {
       },
     });
 
+    revalidatePath("/search");
     return { success: true, tweets: searchResults };
   } catch (error) {
     if (error instanceof z.ZodError) {
