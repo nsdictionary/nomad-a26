@@ -5,6 +5,7 @@ import { searchTweets } from "./actions";
 import TweetCard from "@/components/tweet-card";
 import Input from "@/components/input";
 import { ITweet } from "../(home)/actions";
+import Link from "next/link";
 
 export default function SearchPage() {
   const [query, setQuery] = useState("");
@@ -26,7 +27,11 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="max-w-xl mx-auto pt-4 space-y-4">
+    <div className="max-w-2xl mx-auto p-4 space-y-6">
+      <Link className="text-blue-500" href="/?page=1">
+        ← 목록으로 돌아가기
+      </Link>
+
       <form onSubmit={handleSearch} className="flex justify-center">
         <div className="flex gap-2">
           <Input
