@@ -35,6 +35,7 @@ export default function Profile({
   logOut: () => void;
   enableEdit: boolean;
 }) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [state, dispatch] = useActionState<ProfileState>(
     updateProfile,
     null
@@ -137,7 +138,7 @@ export default function Profile({
               <span className="font-medium">이메일:</span> {user.email}
             </p>
             <p>
-              <span className="font-medium">���입일:</span>{" "}
+              <span className="font-medium">가입일:</span>{" "}
               {user.createdAt.toLocaleDateString()}
             </p>
             <p>
