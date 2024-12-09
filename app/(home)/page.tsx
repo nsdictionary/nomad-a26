@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { getTotalPages, getTweets, ITweet } from "./actions";
 import TweetCard from "@/components/tweet-card";
 import AddTweet from "@/components/add-tweet";
 
-export default function TweetList() {
+function SearchComponent() {
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
 
@@ -83,5 +83,13 @@ export default function TweetList() {
         </Link>
       </div>
     </div>
+  );
+}
+
+export default function TweetList() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SearchComponent />
+    </Suspense>
   );
 }
