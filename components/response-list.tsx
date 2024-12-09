@@ -29,7 +29,11 @@ export default function ResponseList({
   useEffect(() => {
     const loadResponses = async () => {
       const responses = await getResponses(tweetId);
-      const sortedResponses = responses.sort(
+      const formattedResponses = responses.map((response) => ({
+        ...response,
+        id: response.id.toString(),
+      }));
+      const sortedResponses = formattedResponses.sort(
         (a: IResponse, b: IResponse) =>
           new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime()
       );
