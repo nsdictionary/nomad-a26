@@ -26,5 +26,5 @@ export default async function ProfilePage() {
     session.destroy();
     redirect("/");
   };
-  return <Profile user={user} logOut={logOut} />;
+  return <Profile user={user} logOut={logOut} enableEdit={false} />;
 }
