@@ -32,5 +32,5 @@ export default async function UserEditPage({
     session.destroy();
     redirect("/");
   };
-  return <Profile user={user} logOut={logOut} />;
+  return <Profile user={user} logOut={logOut} enableEdit={true} />;
 }
