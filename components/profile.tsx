@@ -3,7 +3,7 @@
 import BackButton from "@/app/components/back-button";
 import { User } from "@prisma/client";
 import { updateProfile } from "@/app/users/[username]/edit/actions";
-import { useActionState } from "react";
+import { useActionState, useOptimistic } from "react";
 import Input from "@/components/input";
 import Button from "@/components/button";
 import { PASSWORD_MIN_LENGTH } from "@/lib/constants";
@@ -35,7 +35,20 @@ export default function Profile({
   logOut: () => void;
   enableEdit: boolean;
 }) {
-  const [state, dispatch] = useActionState<ProfileState>(updateProfile, null);
+  const [state, dispatch] = useActionState<ProfileState>(
+    updateProfile,
+    null
+  ) as [ProfileState, (formData: FormData) => void, boolean];
+  const [optimisticUser, setOptimisticUser] = useOptimistic(
+    user,
+    (state, formData: FormData) => ({
+      ...state,
+      username: formData.get("username")?.toString() || state.username,
+      email: formData.get("email")?.toString() || state.email,
+      bio: formData.get("bio")?.toString() || state.bio,
+    })
+  );
+
   return (
     <div className="max-w-2xl mx-auto p-4">
       <BackButton />
@@ -48,16 +61,27 @@ export default function Profile({
 
       <div className="bg-white p-6 rounded-lg shadow">
         <h2 className="text-xl font-semibold mb-4">프로필 정보</h2>
+        {state?.success && (
+          <p className="text-green-500 mb-4">
+            프로필이 성공적으로 업데이트되었습니다!
+          </p>
+        )}
         {enableEdit ? (
-          <form action={dispatch} className="flex flex-col gap-3">
-            <input type="hidden" name="id" value={user.id} />
+          <form
+            action={(formData: FormData) => {
+              setOptimisticUser(formData);
+              dispatch(formData);
+            }}
+            className="flex flex-col gap-3"
+          >
+            <input type="hidden" name="id" value={optimisticUser.id} />
             <Input
               name="username"
               type="text"
               placeholder="사용자명"
               required
               errors={state?.errors?.username}
-              defaultValue={state?.updatedUser?.username || user.username}
+              defaultValue={optimisticUser.username}
             />
             <Input
               name="email"
@@ -65,14 +89,14 @@ export default function Profile({
               placeholder="이메일"
               required
               errors={state?.errors?.email}
-              defaultValue={state?.updatedUser?.email || user.email}
+              defaultValue={optimisticUser.email}
             />
             <Input
               name="bio"
               type="text"
               placeholder="자기소개"
               errors={state?.errors?.bio}
-              defaultValue={state?.updatedUser?.bio ?? user.bio ?? ""}
+              defaultValue={optimisticUser.bio ?? ""}
             />
             <Input
               name="password"

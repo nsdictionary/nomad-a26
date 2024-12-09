@@ -105,6 +105,7 @@ export async function updateProfile(
   prevState: ProfileState,
   formData: FormData
 ) {
+  //   await new Promise((resolve) => setTimeout(resolve, 3000));
   const data = {
     username: formData.get("username"),
     email: formData.get("email"),
